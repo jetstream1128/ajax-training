@@ -299,6 +299,46 @@ whereAmI(-33.933, 18.474);
 */
 //#endregion
 
-//#region ------ Lecture 257 -----
+//#region ------ Lecture 258 event loop -----
+/*
+console.log('Test Start'); // 1 (top level code)
+setTimeout(() => console.log('0 sec timer', 0)); // 4 callback stack
+Promise.resolve('Resolved Promise 1').then(res => console.log(res)); // 3 (microtasks stack has priority)
+console.log('Test end'); // 2 (top level code)
 
+Promise.resolve('Resolved Promise 2').then(res => {
+  // for (let i = 0; i < 2000000000; i++) {}
+  console.log(res);
+});
+*/
+//#endregion
+
+//#region ------ Lecture 259 building a simple promise -----
+
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log('Lottery draw is happening 🔮');
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('You WIN 🤑');
+    } else {
+      reject(new Error('You lost your money 💩'));
+    }
+  }, 2000);
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+//promisify setTimeout
+const wait = function (second) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, second * 1000);
+  });
+};
+wait(2).then(() => {
+  console.log('Waited 2 sec');
+  return wait(1).then(() => console.log('Waited 3 sec'));
+});
+
+Promise.resolve('ABC1').then(a => console.log(a));
+Promise.reject(new Error('Problem')).catch(a => console.error(a));
 //#endregion
